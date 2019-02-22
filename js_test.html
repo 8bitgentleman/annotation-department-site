@@ -24,8 +24,14 @@
 
 	<body>
 		<div id="root">
-<!--			<nav class="c-nav"><a href="/">← Browse all reads</a></nav>-->
+			<nav class="c-nav"><a href="/">← Browse all reads</a></nav>
 			<main class="l-container l-container--highlights">
+				<header class="c-volume-header">
+					<figure class="c-cover"><img srcSet="https://sawyer-highlights.imgix.net/volume/covers/NtGqCAAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format&amp;dpr=1 1x, https://sawyer-highlights.imgix.net/volume/covers/NtGqCAAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format&amp;dpr=2 2x"
+						 src="https://sawyer-highlights.imgix.net/volume/covers/NtGqCAAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format" alt="The Undersea Network" /></figure>
+					<h1 class="u-antialiased">The Undersea Network</h1>
+					<p class="c-volume-header__authors u-family-mono">Nicole Starosielski</p>
+				</header>
 
 			</main>
 		</div>
@@ -33,11 +39,11 @@
 </html>
 
 <script>
-	var airtable_read_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books?maxRecords=100&view=Book%20View&api_key=keyFxgkRcgV49ZwUE&sortField=Author&sortDirection=asc";
+	var airtable_read_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books?maxRecords=100&view=Book%20View&api_key=keyFxgkRcgV49ZwUE&sortField=Author&sortDirection=desc";
 
 	
-	function quoteToHTML(quote, chapter, dateCaptured, tags) {
-//		return quote, chapter, dateCaptured
+	function quoteToHTML(quote, chapter, dateCaptured) {
+//		return quote, chapter, dateCaptured;   // The function returns the product of p1 and p2
 		var container = document.createElement("article");
 		container.setAttribute('class', 'c-highlight');
 //		create quote
@@ -54,15 +60,7 @@
 //		create location info here
 		var chapterDiv = document.createElement("div");
 		chapterDiv.setAttribute('class', 'c-highlight__nav u-family-mono');
-		
-//		TODO get tags if they exist
-//		TODO skip chapters if they don't exist
-		if (tags !== undefined){
-			var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
-		} else{
-			var chapter = document.createTextNode("Chapter "+chapter);
-		}
-//		var chapter = document.createTextNode("Chapter "+chapter+" · ");
+		var chapter = document.createTextNode("Chapter "+chapter+" · ");
 		chapterDiv.appendChild(chapter);
 		container.append(chapterDiv);
 		document.getElementsByClassName("l-container l-container--highlights")[0].appendChild(container);
@@ -77,54 +75,13 @@
 		.then(function(result) {
 				var quote = result.data['fields']['Quote']
 				var dateCaptured = result.data['fields']['Date_Captured']
+				var chapter = result.data['fields']['Book_Chapter']
 				var highlightColor = result.data['fields']['Highlight_Color']
 				var source = result.data['fields']['Source']
-				
-				if (result.data['fields'].hasOwnProperty("Book_Chapter")){
-					var chapter = result.data['fields']['Book_Chapter']
-				} else {
-					var chapter
-				}
-				if (result.data['fields'].hasOwnProperty("Tags")){
-					var tags = result.data['fields']['Tags'];
-				} else {
-					var tags
-				}
-				
-				quoteToHTML(quote, chapter, dateCaptured, tags)
-				console.log(result.data['fields'])
+				quoteToHTML(quote, chapter, dateCaptured)
+//				console.log(result.data['fields'])
 			})
 		
-	}
-	
-	function createHeader(title, author, cover, id){
-		var container = document.createElement("header");
-		container.setAttribute('class', 'c-volume-header');
-		
-		var figure = document.createElement("figure");
-		figure.setAttribute('class', 'c-cover');
-		
-		var image = document.createElement("img");
-		image.src = cover;
-		image.alt = title;
-		
-		figure.append(image);
-		
-		var h1 = document.createElement("h1");
-		h1.setAttribute('class', 'u-antialiased');
-		var inner_text = document.createTextNode(title);
-		h1.appendChild(inner_text);
-		
-		var p = document.createElement("p");
-		p.setAttribute('class', 'c-volume-header__authors u-family-mono');
-		var p_text = document.createTextNode(author);
-		p.appendChild(p_text);
-		
-//		add it all into the html
-		container.append(figure);
-		container.append(h1);
-		container.append(p);
-		document.getElementsByClassName("l-container l-container--highlights")[0].appendChild(container);
 	}
 	
 	var books;
@@ -133,22 +90,21 @@
 		.then(function(result) {
 //			console.log(result.data.records[4]);
 			
-			books = result.data.records[17];
-			var book_author = books['fields']["Author"][0];
-			var book_title = books['fields']["Book Title"];
-//			var book_cover = books['fields']["Cover"][0]['url'];
-			var book_id = books['id'];
-			var book_quotes = books['fields']['Quotes Master Record']
-			
-			if (books['fields'].hasOwnProperty("Cover")){
-				var book_cover = books['fields']["Cover"][0]['url'];
-			} else {
-				console.log(book_title + ' given generic cover')
-				var book_cover = 'https://www.mobileread.com/forums/attachment.php?attachmentid=111360&d=1379362414'
+			books = result.data.records[4];
+//			const vals = Object.keys(books).map(key => books[key]);
+//			console.log(vals[1])
+
+			if (books['fields'].hasOwnProperty("Author")){
+				console.log(books['fields']['Author'][0])
 			}
 				
-			createHeader(book_title, book_author, book_cover, book_id)
-			
+				
+			var book_author = books['fields']["Author"][0];
+			var book_title = books['fields']["Book Title"];
+			var book_title = books['fields']["Book Title"];
+			var book_cover = books['fields']["Cover"][0]['url'];
+			var book_id = books['id'];
+			var book_quotes = books['fields']['Quotes Master Record']
 			for (i = 0; i < book_quotes.length; i++) { 
 				getQuote(book_quotes[i])
 			}

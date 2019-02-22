@@ -3,23 +3,23 @@
 	font-family: Duospace;
 	font-style: normal;
 	font-weight: 400;
-	src: url(/fonts/duospace/iAWriterDuospace-Regular.eot);
-	src: url(/fonts/duospace/iAWriterDuospace-Regular.eot?#iefix)
+	src: url(fonts/duospace/iAWriterDuospace-Regular.eot);
+	src: url(fonts/duospace/iAWriterDuospace-Regular.eot?#iefix)
 			format("embedded-opentype"),
-		url(/fonts/duospace/iAWriterDuospace-Regular.woff2) format("woff2"),
-		url(/fonts/duospace/iAWriterDuospace-Regular.woff) format("woff"),
-		url(/fonts/duospace/iAWriterDuospace-Regular.ttf) format("truetype");
+		url(fonts/duospace/iAWriterDuospace-Regular.woff2) format("woff2"),
+		url(fonts/duospace/iAWriterDuospace-Regular.woff) format("woff"),
+		url(fonts/duospace/iAWriterDuospace-Regular.ttf) format("truetype");
 }
 @font-face {
 	font-family: Duospace;
 	font-style: normal;
 	font-weight: 700;
-	src: url(/fonts/duospace/iAWriterDuospace-Bold.eot);
-	src: url(/fonts/duospace/iAWriterDuospace-Bold.eot?#iefix)
+	src: url(fonts/duospace/iAWriterDuospace-Bold.eot);
+	src: url(fonts/duospace/iAWriterDuospace-Bold.eot?#iefix)
 			format("embedded-opentype"),
-		url(/fonts/duospace/iAWriterDuospace-Bold.woff2) format("woff2"),
-		url(/fonts/duospace/iAWriterDuospace-Bold.woff) format("woff"),
-		url(/fonts/duospace/iAWriterDuospace-Bold.ttf) format("truetype");
+		url(fonts/duospace/iAWriterDuospace-Bold.woff2) format("woff2"),
+		url(fonts/duospace/iAWriterDuospace-Bold.woff) format("woff"),
+		url(fonts/duospace/iAWriterDuospace-Bold.ttf) format("truetype");
 }
 html {
 	font-size: 10px;
@@ -47,6 +47,40 @@ body {
 	font-size: 1.6rem;
 	padding-bottom: 48px;
 }
+
+.remember-this-will-NOT-be-shown {
+/*	transition: opacity 0.325s;*/
+	-moz-transition: -moz-transform 0.325s ease-in-out, -moz-filter 0.325s ease-in-out, opacity 0.325s ease-in-out;
+	-webkit-transition: -webkit-transform 0.325s ease-in-out, -webkit-filter 0.325s ease-in-out, opacity 0.325s ease-in-out;
+	-ms-transition: -ms-transform 0.325s ease-in-out, -ms-filter 0.325s ease-in-out, opacity 0.325s ease-in-out;
+  -webkit-transition: opacity 0.325s;
+	transition: transform 0.325s ease-in-out, filter 0.325s ease-in-out, opacity 0.325s ease-in-out;
+	-moz-filter: blur(0.1rem);
+	-webkit-filter: blur(0.1rem);
+	-ms-filter: blur(0.1rem);
+	filter: blur(0.1rem);
+  opacity: 0;
+	-moz-transform: translateY(0.25rem);
+	-webkit-transform: translateY(0.25rem);
+	-ms-transform: translateY(0.25rem);
+	transform: translateY(0.25rem);
+		
+}
+
+.start-hidden {
+/*	display: none !important;*/*/
+	opacity: 0;
+}
+
+.show-this{
+	-moz-transform: translateY(0);
+	-webkit-transform: translateY(0);
+	-ms-transform: translateY(0);
+	transform: translateY(0);
+	opacity: 1;
+	
+}
+
 h1,
 h2,
 h3,
