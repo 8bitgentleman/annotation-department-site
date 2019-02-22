@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59986301-2"></script>
+		<script axios src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.11.0/axios.min.js"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'UA-59986301-2');
+		</script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>The Undersea Network by Nicole Starosielski</title>
+		<meta name="description" content="Sawyer's highlights and notes from The Undersea Network." />
+
+		<link rel="stylesheet" type="text/css" href="style.css" />
+	</head>
+
+	<body>
+		<div id="root">
+			<nav class="c-nav"><a href="/">← Browse all reads</a></nav>
+			<main class="l-container l-container--highlights">
+				<header class="c-volume-header">
+					<figure class="c-cover"><img srcSet="https://sawyer-highlights.imgix.net/volume/covers/NtGqCAAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format&amp;dpr=1 1x, https://sawyer-highlights.imgix.net/volume/covers/NtGqCAAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format&amp;dpr=2 2x"
+						 src="https://sawyer-highlights.imgix.net/volume/covers/NtGqCAAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format" alt="The Undersea Network" /></figure>
+					<h1 class="u-antialiased">The Undersea Network</h1>
+					<p class="c-volume-header__authors u-family-mono">Nicole Starosielski</p>
+				</header>
+
+			</main>
+		</div>
+	</body>
+</html>
+
+<script>
+	var airtable_read_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books?maxRecords=100&view=Book%20View&api_key=keyFxgkRcgV49ZwUE&sortField=Author&sortDirection=desc";
+
+	
+	function quoteToHTML(quote, chapter, dateCaptured) {
+//		return quote, chapter, dateCaptured;   // The function returns the product of p1 and p2
+		var container = document.createElement("article");
+		container.setAttribute('class', 'c-highlight');
+//		create quote
+		var blockquote = document.createElement("blockquote");
+		blockquote.setAttribute('class', 'c-highlight__body');
+		var paragraph = document.createElement("p");
+		var span = document.createElement("span");
+		var quote = document.createTextNode(quote);
+		span.appendChild(quote);
+		paragraph.append(span);
+		blockquote.append(paragraph);
+		
+		container.append(blockquote);
+//		create location info here
+		var chapterDiv = document.createElement("div");
+		chapterDiv.setAttribute('class', 'c-highlight__nav u-family-mono');
+		var chapter = document.createTextNode("Chapter "+chapter+" · ");
+		chapterDiv.appendChild(chapter);
+		container.append(chapterDiv);
+		document.getElementsByClassName("l-container l-container--highlights")[0].appendChild(container);
+	}
+	
+	function getQuote(id) {
+		
+		var airtable_get_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Quotes%20Master%20Record/" + id + "?api_key=keyFxgkRcgV49ZwUE"
+//		console.log(airtable_get_endpoint)
+			axios
+		.get(airtable_get_endpoint)
+		.then(function(result) {
+				var quote = result.data['fields']['Quote']
+				var dateCaptured = result.data['fields']['Date_Captured']
+				var chapter = result.data['fields']['Book_Chapter']
+				var highlightColor = result.data['fields']['Highlight_Color']
+				var source = result.data['fields']['Source']
+				quoteToHTML(quote, chapter, dateCaptured)
+				console.log(result.data['fields'])
+			})
+		
+	}
+	
+	var books;
+			axios
+		.get(airtable_read_endpoint)
+		.then(function(result) {
+//			console.log(result.data.records[4]);
+			
+			books = result.data.records[4];
+			var book_author = books['fields']["Author"][0];
+			var book_title = books['fields']["Book Title"];
+			var book_title = books['fields']["Book Title"];
+			var book_cover = books['fields']["Cover"][0]['url'];
+			var book_id = books['id'];
+			var book_quotes = books['fields']['Quotes Master Record']
+			for (i = 0; i < book_quotes.length; i++) { 
+				getQuote(book_quotes[i])
+			}
+			
+				
+		})
+</script>

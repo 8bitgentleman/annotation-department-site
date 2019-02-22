@@ -1,0 +1,105 @@
+<head>
+	<meta charset="UTF-8">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59986301-2"></script>
+	<script axios src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.11.0/axios.min.js"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-59986301-2');
+	</script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Sawyer's Reading Highlights</title>
+	<meta name="description" content="A collection of highlights and notes from books and articles." />
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+<!--	<link rel="SHORTCUT ICON" href="/favicon.png" />-->
+</head>
+<style>
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+	outline:none;
+</style>
+<body>
+	<div id="root">
+		<main class="l-container l-container--shelf u-margin-top--xl">
+			<h1 class="u-antialiased">What I’ve been reading</h1>
+			<ul class="c-shelf">
+					<!-- 	ADD BOOKS HERE		 -->
+			</ul>
+		</main>
+	</div>
+</body>
+
+<script>
+	var airtable_read_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books?maxRecords=100&view=Book%20View&api_key=keyFxgkRcgV49ZwUE&sortField=Author&sortDirection=desc";
+
+	var books;
+	// create one book volume
+	// var book_title = "The Magicians";
+	// var book_cover = 'https://sawyer-highlights.imgix.net/volume/covers/Kax-DwAAQBAJ?w=250&amp;h=400&amp;fit=crop&amp;q=50&amp;auto=format';
+
+
+
+		axios
+		.get(airtable_read_endpoint)
+		.then(function(result) {
+				// console.log(result.data.records[0]);
+		books = result.data.records;
+
+//TODO abstract this into functions
+		var i;
+		for (i = 0; i < books.length; i++) { 
+			try {
+
+				var book_author = books[i]['fields']["Author"][0];
+				var book_title = books[i]['fields']["Book Title"];
+				var book_title = books[i]['fields']["Book Title"];
+				var book_cover = books[i]['fields']["Cover"][0]['url'];
+				var book_id = books[i]['id'];
+	//			console.log(book_cover);
+
+				var container = document.createElement("li");
+				container.setAttribute('class', 'c-shelf__volume');
+
+				// create the figure
+				var figure = document.createElement("figure");
+				figure.setAttribute('class', 'c-cover');
+
+
+				var image = document.createElement("img");
+				image.src = book_cover;
+				image.alt = book_title;
+
+
+				// add img to figure
+				figure.append(image);
+
+
+				var h2 = document.createElement("h2");
+				h2.setAttribute('class', 'c-shelf__volume__title');
+				var inner_text = document.createTextNode(book_title);
+
+				h2.appendChild(inner_text);
+
+				var a = document.createElement("a");
+				a.setAttribute('class', 'c-shelf__link');
+				a.append(figure);
+				a.append(h2);
+				container.append(a);
+	//			console.log(container);
+				// find the shelf location
+				document.getElementsByClassName("c-shelf")[0].appendChild(container);
+			}
+			catch(err) {
+				console.log(err + " at " + book_title)
+			}
+		}
+		});
+
+</script>
