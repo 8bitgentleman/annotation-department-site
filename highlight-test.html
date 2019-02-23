@@ -24,7 +24,7 @@
 
 	<body>
 		<div id="root">
-<!--			<nav class="c-nav"><a href="/">← Browse all reads</a></nav>-->
+			<nav class="c-nav"><a href="/">← Browse all reads</a></nav>
 			<main class="l-container l-container--highlights">
 
 			</main>
@@ -138,7 +138,7 @@
 			var book_title = books['fields']["Book Title"];
 //			var book_cover = books['fields']["Cover"][0]['url'];
 			var book_id = books['id'];
-			var book_quotes = books['fields']['Quotes Master Record']
+			var book_quotes = books['fields']['Quotes Master Record'];
 			
 			if (books['fields'].hasOwnProperty("Cover")){
 				var book_cover = books['fields']["Cover"][0]['url'];
@@ -147,7 +147,7 @@
 				var book_cover = 'https://www.mobileread.com/forums/attachment.php?attachmentid=111360&d=1379362414'
 			}
 				
-			createHeader(book_title, book_author, book_cover, book_id)
+			createHeader(book_title, book_author, book_cover, book_id);
 			
 			for (i = 0; i < book_quotes.length; i++) { 
 				getQuote(book_quotes[i])

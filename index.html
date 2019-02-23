@@ -30,8 +30,11 @@
 
 
 <body>
+	<div id="navigation"></div>
+<!--	<nav class="c-nav" id="start-hidden" onclick="returnToBooks()"><a href="">← Browse all reads</a></nav>-->
 	<div id="root">
 		<main id="c-main" class="l-container l-container--shelf u-margin-top--xl">
+			
 			<h1 class="u-antialiased">What I’ve been highlighting</h1>
 			<ul  class="c-shelf">
 					<!-- 	ADD BOOKS HERE		 -->
@@ -48,18 +51,144 @@
 
 	var books;
 
+	function returnToBooks(){
+//		alert("hello")
+//		nav = document.getElementById("start-hidden");
+		document.getElementById("start-hidden").outerHTML = "";
+	}
+	
+	function createHeader(title, author, cover, id){		
+		
+//		create book header
+		var container = document.createElement("header");
+		container.setAttribute('class', 'c-volume-header');
+		
+		var figure = document.createElement("figure");
+		figure.setAttribute('class', 'c-cover');
+		
+		var image = document.createElement("img");
+		image.src = cover;
+		image.alt = title;
+		
+		figure.append(image);
+		
+		var h1 = document.createElement("h1");
+		h1.setAttribute('class', 'u-antialiased');
+		var inner_text = document.createTextNode(title);
+		h1.appendChild(inner_text);
+		
+		var p = document.createElement("p");
+		p.setAttribute('class', 'c-volume-header__authors u-family-mono');
+		var p_text = document.createTextNode(author);
+		p.appendChild(p_text);
+		
+//		add it all into the html
+		container.append(figure);
+		container.append(h1);
+		container.append(p);
+		container.class = "show-this";
+		document.getElementById("quotes").append(container);
+	}
+	
+	function quoteToHTML(quote, chapter, dateCaptured, tags) {
+//		return quote, chapter, dateCaptured
+		var container = document.createElement("article");
+		container.setAttribute('class', 'c-highlight');
+//		create quote
+		var blockquote = document.createElement("blockquote");
+		blockquote.setAttribute('class', 'c-highlight__body');
+		var paragraph = document.createElement("p");
+		var span = document.createElement("span");
+		var quote = document.createTextNode(quote);
+		span.appendChild(quote);
+		paragraph.append(span);
+		blockquote.append(paragraph);
+		
+		container.append(blockquote);
+//		create location info here
+		var chapterDiv = document.createElement("div");
+		chapterDiv.setAttribute('class', 'c-highlight__nav u-family-mono');
+		
+//		TODO get tags if they exist
+//		TODO skip chapters if they don't exist
+		if (tags !== undefined){
+			var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
+		} else{
+			var chapter = document.createTextNode("Chapter "+chapter);
+		}
+//		var chapter = document.createTextNode("Chapter "+chapter+" · ");
+		chapterDiv.appendChild(chapter);
+		container.append(chapterDiv);
+		document.getElementById("quotes").append(container);
+	}
+	
+	function getQuote(id) {
+		
+		var airtable_get_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Quotes%20Master%20Record/" + id + "?api_key=keyFxgkRcgV49ZwUE"
+//		console.log(airtable_get_endpoint)
+			axios
+		.get(airtable_get_endpoint)
+		.then(function(result) {
+				var quote = result.data['fields']['Quote']
+				var dateCaptured = result.data['fields']['Date_Captured']
+				var highlightColor = result.data['fields']['Highlight_Color']
+				var source = result.data['fields']['Source']
+				
+				if (result.data['fields'].hasOwnProperty("Book_Chapter")){
+					var chapter = result.data['fields']['Book_Chapter']
+				} else {
+					var chapter
+				}
+				if (result.data['fields'].hasOwnProperty("Tags")){
+					var tags = result.data['fields']['Tags'];
+				} else {
+					var tags
+				}
+				
+				quoteToHTML(quote, chapter, dateCaptured, tags)
+			})
+		
+	}
+	
 	function showQuotes(id){
+//		create back button
+		var body = document.getElementById("navigation")
+		var nav = document.createElement("nav");
+		nav.setAttribute('class', 'c-nav');
+		nav.onclick = "returnToBooks()";
+		
+		var a = document.createElement("a");
+		a.setAttribute('href', '');
+		
+		var inner_text = document.createTextNode('← Browse all highlights');
+		a.appendChild(inner_text);
+		nav.append(a);
+		
+		body.append(nav);
+		
+//		create quote div
 		root = document.getElementById("root");
 		root.setAttribute('class', 'remember-this-will-NOT-be-shown');
-		quote = document.getElementById(id);
-		quote.setAttribute('class', 'show-this l-container l-container--highlights');
-		var p = document.createElement("p");
-		var inner_text = document.createTextNode("lots of text in here");
-//
-		p.appendChild(inner_text);
-		quote.append(p)
+		quote = document.querySelectorAll('[book='+id+']');
+		console.log(quote)
 		
-//		alert('Book id: '+id);
+		var airtable_get_book = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books/" + id + "?api_key=keyFxgkRcgV49ZwUE"
+		
+			axios
+		.get(airtable_get_book)
+		.then(function(result) {
+				console.log(result.data);
+				var title = result.data['fields']['Book Title'];
+				var author = result.data['fields']['Author'][0];
+				var cover = result.data['fields']['Cover'][0]['url'];
+				var id = result.data.id;
+				var book_quotes = result.data['fields']['Quotes Master Record'];
+				createHeader(title, author, cover, id);
+				for (i = 0; i < book_quotes.length; i++) { 
+					getQuote(book_quotes[i]);
+				}
+			})
+		
 		
 	}
 
@@ -116,11 +245,11 @@
 			
 			
 //			add a hidden footer here
-			var article = document.createElement("article");
-			article.setAttribute('class', 'start-hidden l-container l-container--highlights');
+//			var article = document.createElement("article");
+//			article.setAttribute('class', 'l-container l-container--highlights');
+//			article.setAttribute('book', book_id);
 //			article.setAttribute('class', 'start-hidden');
-			article.id = book_id;
-			document.getElementById("quotes").appendChild(article);
+//			document.getElementById("quotes").appendChild(article);
 		}
 		catch(err) {
 			console.log(err + " at " + book_title)
