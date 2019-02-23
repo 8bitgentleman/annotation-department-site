@@ -103,7 +103,10 @@ body {
 	
 }
 
-
+#quotes{
+/*	margin: 30px;*/
+	padding: 0 30px;
+}
 
 h1,
 h2,
