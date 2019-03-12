@@ -1,87 +1,109 @@
-<head>
-	<meta charset="UTF-8">
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59986301-2"></script>
-	<script axios src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.11.0/axios.min.js"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59986301-2"></script>
+		<script axios src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.11.0/axios.min.js"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
 
-		gtag('config', 'UA-59986301-2');
-	</script>
+			gtag('config', 'UA-59986301-2');
+		</script>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Matt's Reading Highlights</title>
-	<meta name="description" content="A collection of highlights and notes from books and articles." />
-
-	<link rel="stylesheet" type="text/css" href="style.css" />
-<!--	<link rel="SHORTCUT ICON" href="/favicon.png" />-->
-</head>
-
-
-<style>
-	-webkit-tap-highlight-color: transparent;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	user-select: none;
-	outline:none;
-</style>
+		<title>Matt's Reading Highlights</title>
+		<meta name="description" content="A collection of highlights and notes from books and articles." />
 
 
-<body>
-	<div id="navigation"></div>
-<!--	<nav class="c-nav" id="start-hidden" onclick="returnToBooks()"><a href="">← Browse all reads</a></nav>-->
-	<div id="root">
-		<main id="c-main" class="l-container l-container--shelf u-margin-top--xl">
-			
-			<h1 class="u-antialiased">What I’ve been highlighting</h1>
-			<ul  class="c-shelf">
-					<!-- 	ADD BOOKS HERE		 -->
-			</ul>
-		</main>
-	</div>
-	<div id="quotes">
-		
-	</div>
-</body>
+	<!--	<link rel="SHORTCUT ICON" href="/favicon.png" />-->
+	</head>
 
+
+	<style>
+		-webkit-tap-highlight-color: transparent;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
+		outline:none;
+	</style>
+
+
+	<body id="main-body">
+		<div id="navigation"></div>
+	<!--	<nav class="c-nav" id="start-hidden" onclick="returnToBooks()"><a href="">← Browse all reads</a></nav>-->
+		<div id="root">
+			<main id="c-main" class="l-container l-container--shelf u-margin-top--xl">
+
+				<h1 class="u-antialiased">What I’ve been highlighting</h1>
+				<ul  class="c-shelf">
+						<!-- 	ADD BOOKS HERE		 -->
+				</ul>
+			</main>
+		</div>
+		<div id="quoteModal" class="modal">
+
+			<!-- Modal content -->
+			<div id="modal-content" class="modal-content">
+				<span class="close" onclick="returnToBooks()">&times;</span>
+				<!-- <div id="quotes">
+
+				</div> -->
+			</div>
+			<!-- TODO: add footer closer -->
+			<!-- <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div> -->
+		</div>
+	</body>
+</html>
 <script>
 	var airtable_read_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books?maxRecords=100&view=Book%20View&api_key=keyFxgkRcgV49ZwUE&sortField=Author&sortDirection=desc";
-
+	var modal = document.getElementById('quoteModal');
+	var main_body = document.getElementById('main-body');
+	var span = document.getElementsByClassName("close")[0];
 	var books;
 
 	function returnToBooks(){
+		modal.style.display = "none";
+		var element = document.getElementById("quotes");
+		element.parentNode.removeChild(element);
+		// TODO: Fade out a-la bootstrap
+		// make the body scrollable again
+		main_body.style.overflow = "visible";
 //		alert("hello")
 //		nav = document.getElementById("start-hidden");
-		document.getElementById("start-hidden").outerHTML = "";
+		// document.getElementById("start-hidden").outerHTML = "";
 	}
-	
-	function createHeader(title, author, cover, id){		
-		
+
+	function createHeader(title, author, cover, id){
+
 //		create book header
 		var container = document.createElement("header");
 		container.setAttribute('class', 'c-volume-header');
-		
+
 		var figure = document.createElement("figure");
 		figure.setAttribute('class', 'c-cover');
-		
+
 		var image = document.createElement("img");
 		image.src = cover;
 		image.alt = title;
-		
+
 		figure.append(image);
-		
+
 		var h1 = document.createElement("h1");
 		h1.setAttribute('class', 'u-antialiased');
 		var inner_text = document.createTextNode(title);
 		h1.appendChild(inner_text);
-		
+
 		var p = document.createElement("p");
 		p.setAttribute('class', 'c-volume-header__authors u-family-mono');
 		var p_text = document.createTextNode(author);
 		p.appendChild(p_text);
-		
+
 //		add it all into the html
 		container.append(figure);
 		container.append(h1);
@@ -89,7 +111,7 @@
 		container.class = "show-this";
 		document.getElementById("quotes").append(container);
 	}
-	
+
 	function quoteToHTML(quote, chapter, dateCaptured, tags) {
 //		return quote, chapter, dateCaptured
 		var container = document.createElement("article");
@@ -103,14 +125,15 @@
 		span.appendChild(quote);
 		paragraph.append(span);
 		blockquote.append(paragraph);
-		
+
 		container.append(blockquote);
 //		create location info here
 		var chapterDiv = document.createElement("div");
 		chapterDiv.setAttribute('class', 'c-highlight__nav u-family-mono');
-		
-//		TODO get tags if they exist
-//		TODO skip chapters if they don't exist
+
+// TODO:  get tags if they exist
+// TODO:  skip chapters if they don't exist
+// TODO:  skip the word chapter if it exists as part of the chapter name
 		if (tags !== undefined){
 			var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
 		} else{
@@ -121,9 +144,9 @@
 		container.append(chapterDiv);
 		document.getElementById("quotes").append(container);
 	}
-	
+
 	function getQuote(id) {
-		
+		// TODO: only get actual quotes and not just words
 		var airtable_get_endpoint = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Quotes%20Master%20Record/" + id + "?api_key=keyFxgkRcgV49ZwUE"
 //		console.log(airtable_get_endpoint)
 			axios
@@ -133,7 +156,7 @@
 				var dateCaptured = result.data['fields']['Date_Captured']
 				var highlightColor = result.data['fields']['Highlight_Color']
 				var source = result.data['fields']['Source']
-				
+
 				if (result.data['fields'].hasOwnProperty("Book_Chapter")){
 					var chapter = result.data['fields']['Book_Chapter']
 				} else {
@@ -144,36 +167,20 @@
 				} else {
 					var tags
 				}
-				
+
 				quoteToHTML(quote, chapter, dateCaptured, tags)
 			})
-		
+
 	}
-	
+
 	function showQuotes(id){
-//		create back button
-		var body = document.getElementById("navigation")
-		var nav = document.createElement("nav");
-		nav.setAttribute('class', 'c-nav');
-		nav.onclick = "returnToBooks()";
-		
-		var a = document.createElement("a");
-		a.setAttribute('href', '');
-		
-		var inner_text = document.createTextNode('← Browse all highlights');
-		a.appendChild(inner_text);
-		nav.append(a);
-		
-		body.append(nav);
-		
-//		create quote div
-		root = document.getElementById("root");
-		root.setAttribute('class', 'remember-this-will-NOT-be-shown');
-		quote = document.querySelectorAll('[book='+id+']');
-		console.log(quote)
-		
+		//		create quote div
+		var container = document.createElement("div");
+		container.setAttribute('id', 'quotes');
+		document.getElementById("modal-content").append(container);
+
 		var airtable_get_book = "https://api.airtable.com/v0/appmEGDNmvki6qR5S/Books/" + id + "?api_key=keyFxgkRcgV49ZwUE"
-		
+
 			axios
 		.get(airtable_get_book)
 		.then(function(result) {
@@ -184,12 +191,20 @@
 				var id = result.data.id;
 				var book_quotes = result.data['fields']['Quotes Master Record'];
 				createHeader(title, author, cover, id);
-				for (i = 0; i < book_quotes.length; i++) { 
+				for (i = 0; i < book_quotes.length; i++) {
 					getQuote(book_quotes[i]);
 				}
+				// show the modal
+				// TODO: fade the modal in a-la bootstrap. This may help with loading jerkyness
+
+				// https://www.w3schools.com/Bootstrap/bootstrap_modal.asp
+				modal.style.display = "block";
+				// lock the background from scrollling
+				main_body.style.overflow = "hidden";
+
 			})
-		
-		
+
+
 	}
 
 	function createBook(book, i){
@@ -238,32 +253,32 @@
 
 //				add an onClick function to display a books's quotes
 			container.onclick = function() {showQuotes(book_id)};
-//			container.onclick = function() {alert(book_title + ' by '+ book_author);};
 
 			// find the shelf location for the volume
 			document.getElementsByClassName("c-shelf")[0].appendChild(container);
-			
-			
-//			add a hidden footer here
-//			var article = document.createElement("article");
-//			article.setAttribute('class', 'l-container l-container--highlights');
-//			article.setAttribute('book', book_id);
-//			article.setAttribute('class', 'start-hidden');
-//			document.getElementById("quotes").appendChild(article);
+
 		}
 		catch(err) {
 			console.log(err + " at " + book_title)
 		}
 
 	}
-
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			returnToBooks();
+		}
+	};
+	// TODO: Clear out old code
+	// TODO: Only grab books if they have actual quotes and not just words
+	// TODO: Add a scroll indicator https://www.w3schools.com/howto/howto_js_scroll_indicator.asp
 	axios
 	.get(airtable_read_endpoint)
 	.then(function(result) {
 	books = result.data.records;
 
 	var i;
-	for (i = 0; i < books.length; i++) { 
+	for (i = 0; i < books.length; i++) {
 		createBook(books,i)
 	}
 	});
