@@ -121,8 +121,7 @@
 		blockquote.setAttribute('class', 'c-highlight__body');
 		var paragraph = document.createElement("p");
 		var span = document.createElement("span");
-		var quote = document.createTextNode(quote);
-		span.appendChild(quote);
+		span.innerHTML += quote;
 		paragraph.append(span);
 		blockquote.append(paragraph);
 

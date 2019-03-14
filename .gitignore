@@ -4,3 +4,5 @@ fonts/
 # Test files
 modal_test.html
 js_test.html
+highlight-test.html
+highlight-template.html
