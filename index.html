@@ -113,7 +113,7 @@
 		document.getElementById("quotes").append(container);
 	}
 
-	function quoteToHTML(quote, chapter, dateCaptured, tags) {
+	function quoteToHTML(quote, chapter, dateCaptured, color, tags) {
 //		return quote, chapter, dateCaptured
 		var container = document.createElement("article");
 		container.setAttribute('class', 'c-highlight');
@@ -123,6 +123,10 @@
 		var paragraph = document.createElement("p");
 		var span = document.createElement("span");
 		span.innerHTML += quote;
+		if( color ) {
+			span.style.background = color;
+		}
+		//set color here
 		paragraph.append(span);
 		blockquote.append(paragraph);
 
@@ -156,6 +160,7 @@
 				var dateCaptured = result.data['fields']['Date_Captured']
 				var highlightColor = result.data['fields']['Highlight_Color']
 				var source = result.data['fields']['Source']
+				var color = result.data['fields']['HTML Color']
 
 				if (result.data['fields'].hasOwnProperty("Book_Chapter")){
 					var chapter = result.data['fields']['Book_Chapter']
@@ -168,7 +173,7 @@
 					var tags
 				}
 
-				quoteToHTML(quote, chapter, dateCaptured, tags)
+				quoteToHTML(quote, chapter, dateCaptured, color, tags)
 			})
 
 	}
