@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-59986301-2"></script>
+		<script axios src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.11.0/axios.min.js"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-59986301-2');
+		</script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Matt's Reading Highlights</title>
+		<meta name="description" content="A collection of highlights and notes from books and articles." />
+
+
+	<!--	<link rel="SHORTCUT ICON" href="/favicon.png" />-->
+	</head>
+
+
+	<style>
+		-webkit-tap-highlight-color: transparent;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
+		outline:none;
+	</style>
+
+
+	<body id="main-body">
+		<div id="navigation"></div>
+	<!--	<nav class="c-nav" id="start-hidden" onclick="returnToBooks()"><a href="">← Browse all reads</a></nav>-->
+		<div id="root">
+			<main id="c-main" class="l-container l-container--shelf u-margin-top--xl">
+
+				<h1 class="u-antialiased">What I’ve been highlighting</h1>
+				<br>
+				<p class="currently-reading">
+					<h3 class="u-antialiased">Currently Reading: </h3>
+				</p>
+				<ul  class="c-shelf">
+						<!-- 	ADD BOOKS HERE		 -->
+				</ul>
+			</main>
+		</div>
+		<div id="quoteModal" class="modal">
+
+			<!-- Modal content -->
+			<div id="modal-content" class="modal-content">
+				<span class="close" onclick="returnToBooks()">&times;</span>
+				<!-- <div id="quotes">
+
+				</div> -->
+			</div>
+			<!-- TODO: add footer closer -->
+			<!-- <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div> -->
+		</div>
+	</body>
+</html>
+<script src="https://html5up.net/uploads/demos/dimension/assets/js/jquery.min.js"></script>
+<script src="https://html5up.net/uploads/demos/dimension/assets/js/browser.min.js"></script>
+<script src="https://html5up.net/uploads/demos/dimension/assets/js/breakpoints.min.js"></script>
+<script src="https://html5up.net/uploads/demos/dimension/assets/js/util.js"></script>
+<script src="https://html5up.net/uploads/demos/dimension/assets/js/main.js"></script>
+<script>
+
+	goodreads_url = "https://www.goodreads.com/review/grid_widget/10911554.Matt's%20currently-reading%20book%20montage?cover_size=small&hide_link=&hide_title=&num_books=20&order=a&shelf=currently-reading&sort=date_added&widget_id=1554836869";
+	
+
+//	$.ajax({
+//		url: goodreads_url,
+//		headers: {
+//			'Access-Control-Allow-Origin':'*',
+//			'Access-Control-Allow-Headers':'Origin, X-Requested-With, Content-Type, Accept',
+//			'Accept':'*/*',
+//			'Accept-Encoding':'gzip, deflate'
+//		},
+//		success: function(data){
+//      console.log('succes: '+data);
+//    }
+//	});
+
+	// Vanilla
+//
+//	var httpRequest = new XMLHttpRequest()
+//	httpRequest.onreadystatechange = function (data) {
+//		var text = data;
+//		console.log( data);
+//		var pText = text.match(/(<img alt=\\")(.*?)(" border=)/g)
+//		var i;
+//		for (i = 0; i < pText.length; i++) {
+//			var ans = pText[i].match(/(<img alt=\\")(.*?)(\\" border=)/)[2]
+//			console.log(ans)
+//		}
+//
+//	}
+//	httpRequest.open('GET', goodreads_url)
+	//	httpRequest.setRequestHeader('Access-Control-Allow-Origin', '*')
+//	httpRequest.setRequestHeader("Access-Control-Allow-Headers", 'Origin, X-Requested-With, Content-Type, Accept');
+
+	httpRequest.send()
+//	
+//	$.get( goodreads_url, function( data ) {
+//		var text = data;
+//		// var altText = $(text).find('img').attr('alt');
+//		// (?<=alt=\\")(.*?)(?=\\" border)
+//
+//		// "<img alt=\"Thinking, Fast and Slow\" border="
+//		var pText = text.match(/(<img alt=\\")(.*?)(" border=)/g)
+//		var i;
+//		for (i = 0; i < pText.length; i++) {
+//			// console.log(pText[i])
+//			var ans = pText[i].match(/(<img alt=\\")(.*?)(\\" border=)/)[2]
+//			console.log(ans)
+//			// var theDiv = document.getElementById("currently-reading");
+//			// var content = document.createTextNode(ans);
+//			// var br = document.createElement('br');
+//			// theDiv.appendChild(br);
+//			// theDiv.appendChild(content);
+//		}
+//
+//
+//					});
+</script>

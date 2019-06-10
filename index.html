@@ -40,6 +40,12 @@
 			<main id="c-main" class="l-container l-container--shelf u-margin-top--xl">
 
 				<h1 class="u-antialiased">What I’ve been highlighting</h1>
+				<br>
+<!--
+				<p class="currently-reading">
+					<h3 class="u-antialiased">Currently Reading: </h3>
+				</p>
+-->
 				<ul  class="c-shelf">
 						<!-- 	ADD BOOKS HERE		 -->
 				</ul>
@@ -68,6 +74,8 @@
 	var span = document.getElementsByClassName("close")[0];
 	var books;
 
+//	Grab the books I'm currently reading
+	
 	function returnToBooks(){
 		modal.style.display = "none";
 		var element = document.getElementById("quotes");
