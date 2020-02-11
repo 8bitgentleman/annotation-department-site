@@ -121,7 +121,7 @@
 		document.getElementById("quotes").append(container);
 	}
 
-	function quoteToHTML(quote, chapter, dateCaptured, color, tags) {
+	function quoteToHTML(quote, chapter, dateCaptured, color, tags, article_title) {
 //		return quote, chapter, dateCaptured
 		var container = document.createElement("article");
 		container.setAttribute('class', 'c-highlight');
@@ -147,8 +147,14 @@
 // TODO:  skip chapters if they don't exist
 // TODO:  skip the word chapter if it exists as part of the chapter name
 		if (tags !== undefined){
-			var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
-		} else{
+			if (article_title !== undefined){
+				var chapter = document.createTextNode(article_title + " · #tagsWillGoHere");
+			} else{
+				var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
+			}
+		} else if (article_title !== undefined){
+			var chapter = document.createTextNode(article_title);
+		}else{
 			var chapter = document.createTextNode("Chapter "+chapter);
 		}
 //		var chapter = document.createTextNode("Chapter "+chapter+" · ");
@@ -180,8 +186,13 @@
 				} else {
 					var tags
 				}
+				if (result.data['fields'].hasOwnProperty("Article")){
+					var article_title = result.data['fields']['Article'];
+				} else {
+					var article_title
+				}
 
-				quoteToHTML(quote, chapter, dateCaptured, color, tags)
+				quoteToHTML(quote, chapter, dateCaptured, color, tags, article_title)
 			})
 
 	}
