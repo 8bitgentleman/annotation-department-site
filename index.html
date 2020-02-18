@@ -150,12 +150,20 @@
 			if (article_title !== undefined){
 				var chapter = document.createTextNode(article_title + " · #tagsWillGoHere");
 			} else{
-				var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
+				if (chapter.includes("Chapter")) {
+   					var chapter = document.createTextNode(chapter + " · #tagsWillGoHere");
+				}else {
+ 					var chapter = document.createTextNode("Chapter " + chapter + " · #tagsWillGoHere");
+				}
 			}
 		} else if (article_title !== undefined){
 			var chapter = document.createTextNode(article_title);
 		}else{
-			var chapter = document.createTextNode("Chapter "+chapter);
+			if (chapter.includes("Chapter")) {
+   				var chapter = document.createTextNode(chapter);
+			}else {
+ 				var chapter = document.createTextNode("Chapter "+chapter);
+			}	
 		}
 //		var chapter = document.createTextNode("Chapter "+chapter+" · ");
 		chapterDiv.appendChild(chapter);
